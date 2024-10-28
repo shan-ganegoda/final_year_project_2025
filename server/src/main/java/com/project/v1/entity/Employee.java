@@ -1,5 +1,6 @@
 package com.project.v1.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -78,5 +81,9 @@ public class Employee {
     @Size(max = 45)
     @Column(name = "description", length = 45)
     private String description;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "employee")
+    private Set<User> users = new LinkedHashSet<>();
 
 }
