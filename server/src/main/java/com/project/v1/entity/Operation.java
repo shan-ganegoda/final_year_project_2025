@@ -12,8 +12,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "role")
-public class Role {
+@Table(name = "operation")
+public class Operation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -24,11 +24,7 @@ public class Role {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "role")
-    private Set<User> users = new LinkedHashSet<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "operation")
     private Set<Privilege> privileges = new LinkedHashSet<>();
 
 }
