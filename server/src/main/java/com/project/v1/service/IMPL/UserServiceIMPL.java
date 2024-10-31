@@ -75,7 +75,7 @@ public class UserServiceIMPL implements UserService {
 
         User user = objectMapper.userDtoToUser(userDTO);
 
-        if(!passwordEncoder.encode(userDTO.getPassword()).equals(userrec.getPassword())){
+        if(!userDTO.getPassword().equals(userrec.getPassword())){
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
         userRepository.save(user);

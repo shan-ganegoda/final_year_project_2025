@@ -27,4 +27,8 @@ public interface ObjectMapper {
     List<GenderDTO> genderListToDtoList(List<Gender> genders);
 
     List<EmployeeTypeDTO> employeeTypeListToDtoList(List<EmployeeType> employeeTypes);
+
+    List<UserStatusDTO> userStatusListToDtoList(List<Userstatus> userStatusList);
+
+    List<RoleDTO> roleListToDtoList(List<Role> roles);
 }
