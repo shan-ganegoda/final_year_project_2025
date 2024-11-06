@@ -31,4 +31,6 @@ public interface ObjectMapper {
     List<UserStatusDTO> userStatusListToDtoList(List<Userstatus> userStatusList);
 
     List<RoleDTO> roleListToDtoList(List<Role> roles);
+
+    UserDTO userToUserDto(User user);
 }
