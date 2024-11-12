@@ -11,15 +11,22 @@ const API_URL = environment.apiUrl + '/auth'
 })
 export class AuthService {
 
-  constructor(private http: HttpClient,private ts:TokenService) { }
+  constructor(
+              private http:HttpClient,
+              private ts:TokenService
+  ) { }
 
-  login(email: string, password: string) {
-    return this.http.post(API_URL + 'login',{email,password})
+  login(username: string, password: string) {
+    return this.http.post(API_URL + '/login',{username,password})
       .pipe(
         tap((res:any) => {
           this.ts.setToken(res.AccessToken);
         })
       )
 
+  }
+
+  refreshToken(){
+    return this.http.get(API_URL + '/refresh');
   }
 }

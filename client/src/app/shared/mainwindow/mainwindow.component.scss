@@ -1,0 +1,11 @@
+.example-container {
+  width: 100%;
+  height: 100%;
+}
+
+.example-sidenav {
+  width: 256px;
+  @apply
+  border-r-2
+  border-gray-200
+}
