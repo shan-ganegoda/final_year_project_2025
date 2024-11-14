@@ -45,10 +45,6 @@ export class LoginComponent implements OnInit{
 
       this.as.login(username,password).subscribe({
         next:(data:any) => {
-          this.ss.saveUser(data.user);
-          //console.log(data.authUser.user);
-          this.ss.saveUserAuthorities(data["authorities"]);
-
           this.router.navigateByUrl('/main/home');
           this.authForm.reset();
         },

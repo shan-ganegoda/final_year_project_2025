@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {User} from "../../entity/user";
+import {TokenService} from "./token.service";
 
 const USER_KEY = "auth-user";
 const AUTHORITIES_KEY = "user-authorities"
@@ -9,12 +10,13 @@ const AUTHORITIES_KEY = "user-authorities"
 })
 export class StorageService {
 
-  constructor() { }
+  constructor(private ts:TokenService) { }
 
   logout(){
     sessionStorage.clear();
     localStorage.removeItem(USER_KEY);
     localStorage.removeItem(AUTHORITIES_KEY);
+    this.ts.removeToken();
   }
 
   isLoggedIn(){

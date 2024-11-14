@@ -24,12 +24,12 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping(path = "/login")
-    public ResponseEntity<AuthUser> login(@RequestBody LoginRequest request, HttpServletResponse response){
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request, HttpServletResponse response){
         AuthResponse auth = authService.login(request);
         response.addCookie(cookieProvider.createAuthCookie(auth.getAccessToken()));
         response.addCookie(cookieProvider.createRefreshCookie(auth.getRefreshToken()));
 
-        return ResponseEntity.ok(auth.getAuthUser());
+        return ResponseEntity.ok(auth);
     }
 
     @PostMapping(path = "/register")

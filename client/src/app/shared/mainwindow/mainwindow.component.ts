@@ -10,6 +10,7 @@ import {MatCardModule} from "@angular/material/card";
 import {MatListModule} from "@angular/material/list";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButton} from "@angular/material/button";
+import {StorageService} from "../../core/service/auth/storage.service";
 
 @Component({
   selector: 'app-mainwindow',
@@ -31,10 +32,11 @@ export class MainwindowComponent {
   toggle1: boolean = true;
   toggle2: boolean = false;
 
-  constructor(private router:Router) {
+  constructor(private router:Router,private ss:StorageService) {
   }
 
   logout() {
-    this.router.navigateByUrl("login")
+    this.ss.logout();
+    this.router.navigateByUrl("login");
   }
 }
