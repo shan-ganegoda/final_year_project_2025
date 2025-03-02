@@ -4,6 +4,7 @@ import {MainwindowComponent} from "./shared/mainwindow/mainwindow.component";
 import {HomeComponent} from "./pages/home/home.component";
 import {authenticationGuard} from "./core/interceptor/authentication.guard";
 import {DashboardComponent} from "./pages/dashboard/dashboard.component";
+import {EmployeeComponent} from "./modules/employee/employee/employee.component";
 
 export const routes: Routes = [
   {path:"login" ,component:LoginComponent ,title:"Login"},
@@ -15,6 +16,7 @@ export const routes: Routes = [
     children:[
       {path:"home", component:HomeComponent,title:"Home"},
       {path:"dashboard", component:DashboardComponent,title:"Dashboard"},
+      {path:"employee", component: EmployeeComponent, title:"Employee"},
     ]
   }
 ];

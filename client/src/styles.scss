@@ -50,3 +50,50 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 }
 
+.floating-label{
+  @apply absolute bg-white px-1 py-0 h-fit left-3 -top-2.5 text-gray-400 text-sm transition-all
+  peer-placeholder-shown:text-base
+  peer-placeholder-shown:text-gray-400
+  peer-placeholder-shown:top-2 peer-placeholder-shown:hidden
+  peer-focus:-top-2.5
+}
+
+//Floating Labels for Select Boxes
+.floating-labels-select {
+  @apply absolute bg-white px-1 py-0 h-fit left-3 -top-2.5 text-gray-400 text-sm transition-all;
+}
+//.peer:focus ~ .floating-labels-select,
+//.peer:valid ~ .floating-labels-select {
+//  @apply -top-2.5 text-gray-400 text-sm;
+//}
+select.ng-invalid ~ .floating-labels-select {
+  @apply hidden;
+}
+
+//Invalid Styles For Input Fields
+input.ng-invalid{
+  @apply border-red-600
+  placeholder-error
+  focus:border-red-600
+}
+
+//Invalid Styles For TextArea
+textarea.ng-invalid{
+  @apply border-red-600
+  placeholder-error
+  focus:border-red-600
+}
+
+//Invalid Styles For ComboBoxes
+select.ng-invalid{
+  @apply border-red-600
+  placeholder-error
+  text-error
+}
+
+//Invalid Styles For List
+#list .ng-invalid{
+  @apply border-red-600
+  text-error
+}
+

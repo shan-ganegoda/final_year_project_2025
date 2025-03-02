@@ -13,9 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -50,6 +48,7 @@ public class User implements UserDetails, Principal {
     @Column(name = "dolastupdated")
     private LocalDate dolastupdated;
 
+
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "userstatus_id", nullable = false)
@@ -76,11 +75,12 @@ public class User implements UserDetails, Principal {
 
             authorityList.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
 
+        if (role.getPrivileges() != null) {
             for (Privilege authority : role.getPrivileges()) {
                 authorityList.add(new SimpleGrantedAuthority(
                         authority.getModule().getName() + "-" + authority.getOperation().getName())
                 );
-
+            }
         }
         return authorityList;
     }

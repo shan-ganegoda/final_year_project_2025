@@ -12,6 +12,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButton} from "@angular/material/button";
 import {StorageService} from "../../core/service/auth/storage.service";
 import {User} from "../../core/entity/user";
+import {MatDialog} from "@angular/material/dialog";
+import {LogoutDialogComponent} from "../dialog/logout-dialog/logout-dialog.component";
 
 @Component({
   selector: 'app-mainwindow',
@@ -38,14 +40,27 @@ export class MainwindowComponent implements OnInit{
   ngOnInit(): void {
     const user = this.ss.getUser();
     if(user.id) this.user = user;
+    //console.log(this.user)
   }
 
-  constructor(private router:Router,private ss:StorageService) {
+  constructor(
+    private router:Router,
+    private ss:StorageService,
+    private dialog: MatDialog
+  ) {
   }
 
   logout() {
-    this.ss.logout();
-    this.router.navigateByUrl("login");
+
+    this.dialog.open(LogoutDialogComponent,{}).afterClosed().subscribe(res => {
+      if(res){
+        this.ss.logout();
+        // this.router.navigateByUrl("login");
+        location.reload();
+      }else{
+        return;
+      }
+    })
   }
 
 }

@@ -1,5 +1,6 @@
 package com.project.v1.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Privilege {
     @JoinColumn(name = "module_id", nullable = false)
     private Module module;
 
+    @JsonIgnore
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "role_id", nullable = false)

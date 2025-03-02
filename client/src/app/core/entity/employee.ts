@@ -4,7 +4,7 @@ import {Designation} from "./designation";
 import {EmployeeStatus} from "./employeestatus";
 
 export interface Employee {
-  id: number;
+  id?: number;
   firstname:string;
   lastname:string;
   number:string;

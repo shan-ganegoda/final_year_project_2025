@@ -27,8 +27,7 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private Set<User> users = new LinkedHashSet<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "role")
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "role")
     private Set<Privilege> privileges = new LinkedHashSet<>();
 
 }

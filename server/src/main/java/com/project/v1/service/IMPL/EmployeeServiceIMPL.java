@@ -33,14 +33,14 @@ public class EmployeeServiceIMPL implements EmployeeService {
             }else{
                 String lastname = params.get("lastname");
                 String nic = params.get("nic");
-                String employeestatusid = params.get("employeestatusid");
+                String designationid = params.get("designationid");
                 String genderid = params.get("genderid");
 
                 Stream<EmployeeDTO> stream = dtos.stream();
 
                 if(lastname != null) stream = stream.filter(e-> e.getLastname().contains(lastname));
                 if(nic != null) stream = stream.filter(e-> e.getNic().equals(nic));
-                if(employeestatusid != null) stream = stream.filter(e-> e.getEmployeestatus().getId() == Integer.parseInt(employeestatusid));
+                if(designationid != null) stream = stream.filter(e-> e.getDesignation().getId() == Integer.parseInt(designationid));
                 if(genderid != null) stream = stream.filter(e-> e.getGender().getId() == Integer.parseInt(genderid));
 
                 return stream.collect(Collectors.toList());

@@ -1,4 +1,4 @@
 export interface EmployeeStatus{
   id:number;
-  name:string;
+  name?:string;
 }
