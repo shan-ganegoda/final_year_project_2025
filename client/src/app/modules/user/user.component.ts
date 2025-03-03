@@ -17,6 +17,10 @@ import {EmployeeService} from "../../core/service/employee/employee.service";
 import {UserstatusService} from "../../core/service/user/userstatus.service";
 import {RoleService} from "../../core/service/user/role.service";
 import {RegexService} from "../../core/service/regexes/regex.service";
+import {MatDialog} from "@angular/material/dialog";
+import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
+import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
+import {ToastService} from "../../core/util/toast.service";
 
 @Component({
   selector: 'app-user',
@@ -72,7 +76,9 @@ export class UserComponent implements OnInit{
               private es:EmployeeService,
               private uss:UserstatusService,
               private rs:RoleService,
-              private rx:RegexService
+              private rx:RegexService,
+              private dialog: MatDialog,
+              private tst:ToastService
               ) {
 
     this.userSearchForm = this.fb.group({
@@ -200,6 +206,77 @@ export class UserComponent implements OnInit{
 
   }
 
+  getUpdates():string {
+    let updates: string = "";
+    for (const controlName in this.userForm.controls) {
+      const control = this.userForm.controls[controlName];
+      if (control.dirty) {
+        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1)+" Changed";
+      }
+    }
+    return updates;
+  }
+
+  getErrors(){
+
+    let errors:string = "";
+
+    for(const controlName in this.userForm.controls){
+      const control = this.userForm.controls[controlName];
+      if(control.errors){
+        if(this.regexes[controlName] != undefined){
+          errors = errors + "<br>" + this.regexes[controlName]['message'];
+        }else{
+          errors = errors + "<br>Invalid " + controlName;
+        }
+      }
+    }
+    return errors;
+  }
+
+  add() {
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - User Add ",message: "You Have Following Errors <br> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+    }else{
+      //this.employee = this.employeeForm.getRawValue();
+      const user:User = {
+        username: this.userForm.controls['username'].value,
+        password: this.userForm.controls['password'].value,
+        description: this.userForm.controls['description'].value,
+
+        userstatus: {id: parseInt(this.userForm.controls['userstatus'].value)},
+        employee: {id: parseInt(this.userForm.controls['employee'].value)},
+        role: {id: parseInt(this.userForm.controls['role'].value)},
+
+      }
+
+      this.dialog.open(ConfirmDialogComponent,{data:"User Add " +user.username})
+        .afterClosed().subscribe(res => {
+        if(res) {
+          this.us.save(user).subscribe({
+            next:() => {
+              this.tst.handleResult('success',"User Saved Successfully");
+              this.loadTable("");
+              this.clearForm();
+            },
+            error:(err:any) => {
+              this.tst.handleResult('failed',err.error.data.message);
+              //console.log(err);
+            }
+          });
+        }
+      })
+    }
+  }
+
   handleSearch() {
 
   }
@@ -209,9 +286,7 @@ export class UserComponent implements OnInit{
   }
 
 
-  add() {
 
-  }
 
   update(user: User) {
 

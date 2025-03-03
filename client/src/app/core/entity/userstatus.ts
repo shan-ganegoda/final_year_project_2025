@@ -1,4 +1,4 @@
 export interface UserStatus{
   id:number;
-  name:string;
+  name?:string;
 }
