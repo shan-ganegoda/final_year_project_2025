@@ -70,195 +70,86 @@
         <span class="ml-5 text-white text-lg ">Data Form</span>
       </div>
 
-<!--      <form class="mt-5" [formGroup]="employeeForm">-->
+      <form class="mt-5" [formGroup]="userForm">
 
-<!--        <div class="h-28 mb-8 flex flex-row items-center justify-center">-->
-<!--          <img class="h-32 w-32 rounded-full border-2" src="{{imageempurl ? imageempurl : '../assets/tabledefault.png'}}">-->
-<!--          <div class="flex flex-col mt-2">-->
-<!--            <input  id="userImage" hidden="hidden" (change)="selectImage($event)" select type="file" formControlName="photo">-->
-<!--            <label for="userImage" class="btn ml-10 mb-2 rounded-md text-center bg-gray-950 text-white w-28 hover:bg-gray-900">Select</label>-->
-<!--            <label class="btn ml-10 mb-2 rounded-md text-center bg-gray-950 text-white hover:bg-gray-900" (click)="clearImage()">Clear</label>-->
-<!--          </div>-->
-<!--        </div>-->
+        <div class="relative w-full px-2 mb-3">
+          <select class=" select select-bordered w-full focus:outline-none"
+                  formControlName="employee"
+          >
+            <option disabled [ngValue]="null">Employee</option>
 
-<!--        <div class="relative w-full px-2 mb-3">-->
-<!--          <input-->
-<!--            type="text"-->
-<!--            placeholder="First Name"-->
-<!--            class="peer input input-bordered w-full focus:outline-none"-->
-<!--            formControlName="firstname"-->
-<!--          />-->
-<!--          <label class="floating-label">First Name</label>-->
+            @for(employee of employees; track employees){
+              <option [value]=employee.id>{{employee.firstname + " " + employee.lastname }}</option>
+            }
+          </select>
+          <label class="floating-labels-select">Employee</label>
+        </div>
 
-<!--        </div>-->
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="text"
+            placeholder="Username"
+            class="peer input input-bordered w-full focus:outline-none"
+            formControlName="username"
+          />
+          <label class="floating-label">Username</label>
+        </div>
 
-<!--        <div class="relative w-full px-2 mb-3">-->
-<!--          <input-->
-<!--            type="text"-->
-<!--            placeholder="Last Name"-->
-<!--            class=" peer input input-bordered w-full focus:outline-none"-->
-<!--            formControlName="lastname"-->
-<!--          />-->
-<!--          <label class="floating-label">Last Name</label>-->
+        <div class="relative w-full px-2 mb-3">
+          <input
+            type="password"
+            placeholder="Password"
+            class=" peer input input-bordered w-full focus:outline-none"
+            formControlName="password"
+          />
+          <label class="floating-label">Password</label>
+        </div>
 
-<!--        </div>-->
+        <div class="relative w-full px-2 mb-3">
+          <select class=" select select-bordered w-full focus:outline-none"
+                  formControlName="role"
+          >
+            <option disabled [ngValue]="null">Role</option>
 
-<!--        <div class="relative w-full px-2 mb-3">-->
-<!--          <input-->
-<!--            type="text"-->
-<!--            placeholder="NIC"-->
-<!--            class=" peer input input-bordered w-full focus:outline-none"-->
-<!--            formControlName="nic"-->
-<!--          />-->
-<!--          <label class="floating-label">NIC</label>-->
-<!--        </div>-->
+            @for(role of roles; track roles){
+              <option [value]=role.id>{{role.name}}</option>
+            }
+          </select>
+          <label class="floating-labels-select">Role</label>
+        </div>
 
-<!--        <div class="relative w-full px-2 mb-3">-->
-<!--          <input-->
-<!--            type="text"-->
-<!--            placeholder="Date Of Birth"-->
-<!--            class="peer input input-bordered w-full focus:outline-none"-->
-<!--            formControlName="dob"-->
-<!--            onfocus="(this.type='date')"-->
-<!--          />-->
-<!--          <label class="floating-label">Date Of Birth</label>-->
-<!--        </div>-->
+        <div class="relative w-full px-2 mb-3">
+          <select class=" select select-bordered w-full focus:outline-none"
+                  formControlName="userstatus"
+          >
+            <option disabled [ngValue]="null">UserStatus</option>
 
-<!--        <div class="flex flex-row items-center mb-3">-->
-<!--          <div class="w-full relative px-2">-->
-<!--            <select class=" select select-bordered w-full focus:outline-none"-->
-<!--                    formControlName="gender"-->
-<!--            >-->
-<!--              <option disabled [ngValue]="null">Gender</option>-->
+            @for(userstatus of userstatuses; track userstatuses){
+              <option [value]=userstatus.id>{{userstatus.name}}</option>
+            }
+          </select>
+          <label class="floating-labels-select">UserStatus</label>
+        </div>
 
-<!--              @for(gender of genders; track genders){-->
-<!--                <option [value]=gender.id>{{gender.name}}</option>-->
-<!--              }-->
-<!--            </select>-->
-<!--            <label class="floating-labels-select">Gender</label>-->
-<!--          </div>-->
-
-<!--          <div class="w-full relative px-2">-->
-<!--            <select class=" select select-bordered w-full focus:outline-none"-->
-<!--                    formControlName="employeestatus"-->
-<!--            >-->
-<!--              <option disabled [ngValue]="null">Status</option>-->
-
-<!--              @for(employeestatus of employeestatuses; track employeestatuses){-->
-<!--                <option value='{{employeestatus.id}}'>{{employeestatus.name}}</option>-->
-<!--              }-->
-<!--            </select>-->
-<!--            <label class="floating-labels-select">Status</label>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <div class="relative w-full px-2 mb-3">-->
-<!--          <input-->
-<!--            type="text"-->
-<!--            placeholder="Do Assigned"-->
-<!--            class=" peer input input-bordered w-full focus:outline-none"-->
-<!--            formControlName="doassigned"-->
-<!--            onfocus="(this.type='date')"-->
-<!--          />-->
-<!--          <label class="floating-label">Do Assigned</label>-->
-<!--        </div>-->
-
-<!--        <div class="relative w-full px-2 mb-3">-->
-<!--          <input-->
-<!--            type="text"-->
-<!--            placeholder="Email"-->
-<!--            class=" peer input input-bordered w-full focus:outline-none"-->
-<!--            formControlName="email"-->
-<!--          />-->
-<!--          <label class="floating-label">Email</label>-->
-<!--        </div>-->
-
-<!--        <div class="flex flex-row items-center mb-3">-->
-<!--          <div class="w-full px-2 relative">-->
-<!--            <input-->
-<!--              type="text"-->
-<!--              placeholder="Mobile"-->
-<!--              class="peer input input-bordered w-full  focus:outline-none"-->
-<!--              formControlName="mobile"-->
-<!--            />-->
-<!--            <label class="floating-label">Mobile</label>-->
-<!--          </div>-->
-
-<!--          <div class="w-full px-2 relative">-->
-<!--            <input-->
-<!--              type="text"-->
-<!--              placeholder="Land"-->
-<!--              class="peer input input-bordered w-full focus:outline-none"-->
-<!--              formControlName="land"-->
-<!--            />-->
-<!--            <label class="floating-label">Land</label>-->
-<!--          </div>-->
-
-<!--        </div>-->
-
-<!--        <div class="flex flex-row items-center mb-3 px-2">-->
-<!--          <div class="relative mr-2 w-full">-->
-<!--            <input-->
-<!--              type="text"-->
-<!--              placeholder="Number"-->
-<!--              class="peer input input-bordered w-full focus:outline-none"-->
-<!--              formControlName="number"-->
-<!--            />-->
-<!--            <label class="floating-label">Number</label>-->
-<!--          </div>-->
-
-<!--          <button class="btn bg-gray-950 text-white hover:bg-gray-900" (click)="generateRandomNumber()">Generate Number</button>-->
-<!--        </div>-->
-
-<!--        <div class="flex flex-row items-center mb-3">-->
-<!--          <div class="relative w-full px-2">-->
-<!--            <select-->
-<!--              class="peer select select-bordered w-full focus:outline-none mr-2"-->
-<!--              formControlName="employeetype"-->
-<!--            >-->
-<!--              <option disabled [ngValue]="null">Employee Type</option>-->
-<!--              @for (emptype of emptypes; track emptypes) {-->
-<!--                <option value="{{emptype.id}}">{{emptype.name}}</option>-->
-<!--              }-->
-<!--            </select>-->
-<!--            <label class="floating-labels-select">Employee Type</label>-->
-<!--          </div>-->
-
-<!--          <div class="relative w-full px-2">-->
-<!--            <select-->
-<!--              class="peer select select-bordered w-full focus:outline-none"-->
-<!--              formControlName="designation"-->
-<!--            >-->
-<!--              <option disabled [ngValue]="null">Designation</option>-->
-
-<!--              @for (designation of designations; track designations) {-->
-<!--                <option value="{{designation.id}}">{{designation.name}}</option>-->
-<!--              }-->
-<!--            </select>-->
-<!--            <label class="floating-labels-select">Designation</label>-->
-<!--          </div>-->
-
-<!--        </div>-->
-
-<!--        <div class="relative w-full mb-3 px-2">-->
-<!--            <textarea-->
-<!--              class="peer textarea textarea-bordered w-full h-36 focus:outline-none"-->
-<!--              placeholder="Description"-->
-<!--              formControlName="description"-->
-<!--            ></textarea>-->
-<!--          <label class="floating-label">Description</label>-->
-<!--        </div>-->
+        <div class="relative w-full mb-3 px-2">
+            <textarea
+              class="peer textarea textarea-bordered w-full h-36 focus:outline-none"
+              placeholder="Description"
+              formControlName="description"
+            ></textarea>
+          <label class="floating-label">Description</label>
+        </div>
 
 
-<!--        <div class="flex flex-row mt-3 max-w-[99%] px-2 pb-5">-->
-<!--          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaadd || !hasWriteAuthority" (click)="addEmployee()">Add</button>-->
-<!--          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaupd || !hasUpdateAuthority" (click)="updateEmployee(employee)">Update</button>-->
-<!--          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="deleteEmployee(employee)"-->
-<!--                  [disabled]="!hasDeleteAuthority || !enadel" >Delete</button>-->
-<!--          <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>-->
-<!--        </div>-->
+        <div class="flex flex-row mt-3 max-w-[99%] px-2 pb-5">
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaadd || !hasWriteAuthority" (click)="add()">Add</button>
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" [disabled]="!enaupd || !hasUpdateAuthority" (click)="update(user)">Update</button>
+          <button class="btn text-white bg-gray-950 mr-1 w-1/4 hover:bg-gray-900" (click)="delete(user)"
+                  [disabled]="!hasDeleteAuthority || !enadel" >Delete</button>
+          <button class="btn text-white bg-gray-950 w-1/4 hover:bg-gray-900" (click)="clearForm()">Clear</button>
+        </div>
 
-<!--      </form>-->
+      </form>
 
 
     </div>
