@@ -366,22 +366,44 @@ export class UserComponent implements OnInit{
 
   }
 
-  handleSearch() {
+  clearForm() {
+    this.userForm.reset();
+    this.userForm.controls['userstatus'].setValue(null);
+    this.userForm.controls['employee'].setValue(null);
+    this.userForm.controls['role'].setValue(null);
+    this.enableButtons(true,false,false);
+  }
 
+  handleSearch() {
+    const ssusername  = this.userSearchForm.controls['ssusername'].value;
+    const ssrole  = this.userSearchForm.controls['ssrole'].value;
+    const ssuserstatus  = this.userSearchForm.controls['ssuserstatus'].value;
+
+    let query = ""
+
+    if(ssusername != null && ssusername.trim() !="") query = query + "&username=" + ssusername;
+    if(ssrole != 'default') query = query + "&roleid=" + parseInt(ssrole);
+    if(ssuserstatus != 'default') query = query + "&userstatusid=" + parseInt(ssuserstatus);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {
 
-  }
+    const operation = "Clear Search";
 
-
-
-
-
-
-
-
-  clearForm() {
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.userSearchForm.reset();
+        this.userSearchForm.controls['ssrole'].setValue('default');
+        this.userSearchForm.controls['ssuserstatus'].setValue('default');
+        this.loadTable("");
+      }
+    });
 
   }
 }
