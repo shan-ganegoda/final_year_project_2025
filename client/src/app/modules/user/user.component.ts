@@ -344,6 +344,28 @@ export class UserComponent implements OnInit{
     }
   }
 
+  delete(user: User) {
+
+    const operation = "Delete User " + user.username;
+
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res && user.id){
+        this.us.delete(user.id).subscribe({
+          next: () => {
+            this.loadTable("");
+            this.tst.handleResult("success","User Deleted Successfully");
+            this.clearForm();
+          },
+          error: (err:any) => {
+            this.tst.handleResult("failed",err.error.data.message);
+          }
+        });
+      }
+    })
+
+  }
+
   handleSearch() {
 
   }
@@ -357,9 +379,7 @@ export class UserComponent implements OnInit{
 
 
 
-  delete(user: User) {
 
-  }
 
   clearForm() {
 
