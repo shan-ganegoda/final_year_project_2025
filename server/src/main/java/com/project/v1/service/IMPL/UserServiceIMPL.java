@@ -81,6 +81,11 @@ public class UserServiceIMPL implements UserService {
 
         User user = objectMapper.userDtoToUser(userDTO);
 
+        LocalDate today = LocalDate.now();
+
+        user.setDocreated(userrec.getDocreated());
+        user.setDolastupdated(today);
+
         if(!userDTO.getPassword().equals(userrec.getPassword())){
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }

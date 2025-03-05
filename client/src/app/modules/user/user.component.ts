@@ -277,6 +277,73 @@ export class UserComponent implements OnInit{
     }
   }
 
+  update(userdata: User) {
+
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - User Update ",message: "You Have Following Errors <br> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - User Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            const user:User = {
+              id: userdata.id,
+              username: this.userForm.controls['username'].value,
+              password: this.userForm.controls['password'].value,
+              description: this.userForm.controls['description'].value,
+
+              userstatus: {id: parseInt(this.userForm.controls['userstatus'].value)},
+              employee: {id: parseInt(this.userForm.controls['employee'].value)},
+              role: {id: parseInt(this.userForm.controls['role'].value)},
+
+            }
+
+            this.dialog.open(ConfirmDialogComponent,{data:"User Update "})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.us.update(user).subscribe({
+                  next:() => {
+                    this.tst.handleResult('success',"User Updated Successfully");
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.tst.handleResult('failed',err.error.data.message);
+                    //console.log(err);
+                  }
+                });
+              }
+            })
+
+          }
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - User Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
+  }
+
   handleSearch() {
 
   }
@@ -288,9 +355,7 @@ export class UserComponent implements OnInit{
 
 
 
-  update(user: User) {
 
-  }
 
   delete(user: User) {
 
