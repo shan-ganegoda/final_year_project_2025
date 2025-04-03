@@ -250,25 +250,112 @@ export class PrivilegeComponent implements OnInit{
     }
   }
 
-  handleSearch() {
+  update(privilege: Privilege) {
+    let errors = this.getErrors();
 
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Privilege Update ",message: "You Have Following Errors <br> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+
+    }else{
+
+      let updates:string = this.getUpdates();
+
+      if(updates != ""){
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Privilege Update ",message: "You Have Following Updates <br> " + updates}
+        }).afterClosed().subscribe(res => {
+          if(!res){
+            return;
+          }else{
+
+            const obj:Privilege = {
+              id: privilege.id,
+              module: {id: parseInt(this.privilegeForm.controls['module'].value)},
+              operation: {id: parseInt(this.privilegeForm.controls['operation'].value)},
+              role: {id: parseInt(this.privilegeForm.controls['role'].value)},
+
+            }
+
+            this.dialog.open(ConfirmDialogComponent,{data:"Privilege Update "})
+              .afterClosed().subscribe(res => {
+              if(res) {
+                this.ps.update(obj).subscribe({
+                  next:() => {
+                    this.tst.handleResult('success',"Privilege Updated Successfully");
+                    this.loadTable("");
+                    this.clearForm();
+                  },
+                  error:(err:any) => {
+                    this.tst.handleResult('failed',err.error.data.message);
+                    //console.log(err);
+                  }
+                });
+              }
+            })
+
+          }
+        });
+
+      }else{
+        this.dialog.open(WarningDialogComponent,{
+          data:{heading:"Updates - Privilege Update ",message: "No Fields Updated "}
+        }).afterClosed().subscribe(res =>{
+          if(res){return;}
+        })
+      }
+    }
+  }
+
+  delete(privilege: Privilege) {
+    const operation = "Delete Privilege ";
+
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe((res:boolean) => {
+      if(res && privilege.id){
+        this.ps.delete(privilege.id).subscribe({
+          next: () => {
+            this.loadTable("");
+            this.tst.handleResult("success","Privilege Deleted Successfully");
+            this.clearForm();
+          },
+          error: (err:any) => {
+            this.tst.handleResult("failed",err.error.data.message);
+          }
+        });
+      }
+    })
+  }
+
+  clearForm() {
+    this.privilegeForm.controls['module'].setValue(null);
+    this.privilegeForm.controls['operation'].setValue(null);
+    this.privilegeForm.controls['role'].setValue(null);
+    this.enableButtons(true,false,false);
+  }
+
+  handleSearch() {
+    const ssrole  = this.privilegeSearchForm.controls['ssrole'].value;
+    const ssmodule  = this.privilegeSearchForm.controls['ssmodule'].value;
+    const ssoperation  = this.privilegeSearchForm.controls['ssoperation'].value;
+
+    let query = ""
+
+    if(ssrole != 'default') query = query + "&roleid=" + parseInt(ssrole);
+    if(ssmodule != 'default') query = query + "&moduleid=" + parseInt(ssmodule);
+    if(ssoperation != 'default') query = query + "&operationid=" + parseInt(ssoperation);
+
+    if(query != "") query = query.replace(/^./, "?")
+    this.loadTable(query);
   }
 
   clearSearch() {
 
   }
-
-  delete(privilege: Privilege) {
-
-  }
-
-  clearForm() {
-
-  }
-
-  update(privilege: Privilege) {
-
-  }
-
 
 }
