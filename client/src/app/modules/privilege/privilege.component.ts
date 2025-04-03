@@ -355,7 +355,19 @@ export class PrivilegeComponent implements OnInit{
   }
 
   clearSearch() {
+    const operation = "Clear Search";
 
+    this.dialog.open(ConfirmDialogComponent,{data:operation})
+      .afterClosed().subscribe(res => {
+      if(!res){
+        return;
+      }else{
+        this.privilegeSearchForm.controls['ssrole'].setValue('default');
+        this.privilegeSearchForm.controls['ssmodule'].setValue('default');
+        this.privilegeSearchForm.controls['ssoperation'].setValue('default');
+        this.loadTable("");
+      }
+    });
   }
 
 }
