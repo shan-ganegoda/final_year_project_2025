@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Role} from "../../core/entity/role";
 import {Module} from "../../core/entity/module";
 import {Operation} from "../../core/entity/operation";
@@ -14,6 +14,9 @@ import {MatTableDataSource} from "@angular/material/table";
 import {User} from "../../core/entity/user";
 import {Observable} from "rxjs";
 import {PrivilegeService} from "../../core/service/privilege/privilege.service";
+import {ModuleService} from "../../core/service/privilege/module.service";
+import {RoleService} from "../../core/service/user/role.service";
+import {OperationService} from "../../core/service/privilege/operation.service";
 
 @Component({
   selector: 'app-privilege',
@@ -65,7 +68,10 @@ export class PrivilegeComponent implements OnInit{
    private fb:FormBuilder,
    private auths: AuthorizationService,
    private ps:PrivilegeService,
-   private cdr:ChangeDetectorRef
+   private cdr:ChangeDetectorRef,
+   private ms:ModuleService,
+   private rs:RoleService,
+   private os:OperationService
    ) {
    this.privilegeSearchForm = this.fb.group({
      ssrole:['default',Validators.required],
@@ -74,9 +80,10 @@ export class PrivilegeComponent implements OnInit{
    },{updateOn:"change"});
 
    this.privilegeForm = this.fb.group({
-     role:['default',Validators.required],
-     module:['default',Validators.required],
-     operation:['default',Validators.required],
+     "role": new FormControl(null,[Validators.required]),
+     "module": new FormControl(null,[Validators.required]),
+     "operation": new FormControl(null,[Validators.required]),
+
    },{updateOn:"change"});
  }
   ngOnInit(): void {
@@ -85,6 +92,26 @@ export class PrivilegeComponent implements OnInit{
 
   initialize(){
     this.loadTable("");
+
+    this.rs.getAll().subscribe({
+      next: data=>{
+        this.roles = data;
+      }
+    });
+
+    this.os.getAll().subscribe({
+      next: data=>{
+        this.operations = data;
+      }
+    })
+
+    this.ms.getAll().subscribe({
+      next: data=>{
+        this.modules = data;
+      }
+    })
+
+    this.createForm();
   }
 
   loadTable(query:string){
@@ -100,6 +127,57 @@ export class PrivilegeComponent implements OnInit{
         console.log(err);
       }
     })
+  }
+
+  createForm(){
+
+    this.privilegeForm.controls['role'].setValidators([Validators.required]);
+    this.privilegeForm.controls['module'].setValidators([Validators.required]);
+    this.privilegeForm.controls['operation'].setValidators([Validators.required]);
+
+    Object.values(this.privilegeForm.controls).forEach( control => { control.markAsTouched(); } );
+
+    for (const controlName in this.privilegeForm.controls) {
+      const control = this.privilegeForm.controls[controlName];
+      control.valueChanges.subscribe(value => {
+
+          if (this.oldprivilege != undefined && control.valid) {
+            // @ts-ignore
+            if (value === this.privilege[controlName]) {
+              control.markAsPristine();
+            } else {
+              control.markAsDirty();
+            }
+          } else {
+            control.markAsPristine();
+          }
+        }
+      );
+
+    }
+    this.enableButtons(true,false,false);
+  }
+
+  enableButtons(add:boolean, upd:boolean, del:boolean){
+    this.enaadd=add;
+    this.enaupd=upd;
+    this.enadel=del;
+  }
+
+  fillForm(data:Privilege){
+    this.enableButtons(false,true,true);
+
+    this.privilege = data;
+    this.oldprivilege = this.privilege;
+
+    this.privilegeForm.setValue({
+      operation: this.privilege.operation?.id,
+      module: this.privilege.module?.id,
+      role: this.privilege.role?.id,
+    });
+
+    this.privilegeForm.markAsPristine();
+
   }
 
   handleSearch() {
@@ -126,7 +204,5 @@ export class PrivilegeComponent implements OnInit{
 
   }
 
-  fillForm(privilege: Privilege) {
 
-  }
 }

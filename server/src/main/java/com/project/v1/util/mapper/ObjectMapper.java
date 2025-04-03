@@ -2,6 +2,7 @@ package com.project.v1.util.mapper;
 
 import com.project.v1.dto.*;
 import com.project.v1.entity.*;
+import com.project.v1.entity.Module;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -33,4 +34,8 @@ public interface ObjectMapper {
     List<RoleDTO> roleListToDtoList(List<Role> roles);
 
     UserDTO userToUserDto(User user);
+
+    List<OperationDTO> operationListToDtoList(List<Operation> operations);
+
+    List<ModuleDTO> moduleListToDtoList(List<Module> modules);
 }

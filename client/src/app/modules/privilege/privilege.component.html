@@ -146,18 +146,18 @@
             </thead>
 
             <tbody>
-              @for(privileges of data | async; track privileges){
+              @for(privilege of data | async; track privileges){
                 <tr>
 
                   <td>
                     <div class="flex items-center">
-                      {{privileges.role.name}}
+                      {{privilege.role.name}}
                     </div>
                   </td>
 
                   <td>
                     <div class="flex items-center">
-                      {{privileges.module.name + " - " + privileges.operation.name}}
+                      {{privilege.module.name + " - " + privilege.operation.name}}
                     </div>
                   </td>
 
