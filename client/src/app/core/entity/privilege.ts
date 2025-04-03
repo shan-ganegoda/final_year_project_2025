@@ -3,7 +3,7 @@ import {Operation} from "./operation";
 import {Module} from "./module";
 
 export interface Privilege{
-  id:number;
+  id?:number;
   operation: Operation;
   module: Module;
   role: Role;

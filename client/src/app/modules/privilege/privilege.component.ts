@@ -17,6 +17,10 @@ import {PrivilegeService} from "../../core/service/privilege/privilege.service";
 import {ModuleService} from "../../core/service/privilege/module.service";
 import {RoleService} from "../../core/service/user/role.service";
 import {OperationService} from "../../core/service/privilege/operation.service";
+import {WarningDialogComponent} from "../../shared/dialog/warning-dialog/warning-dialog.component";
+import {ConfirmDialogComponent} from "../../shared/dialog/confirm-dialog/confirm-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
+import {ToastService} from "../../core/util/toast.service";
 
 @Component({
   selector: 'app-privilege',
@@ -71,7 +75,9 @@ export class PrivilegeComponent implements OnInit{
    private cdr:ChangeDetectorRef,
    private ms:ModuleService,
    private rs:RoleService,
-   private os:OperationService
+   private os:OperationService,
+   private dialog: MatDialog,
+   private tst:ToastService
    ) {
    this.privilegeSearchForm = this.fb.group({
      ssrole:['default',Validators.required],
@@ -180,6 +186,70 @@ export class PrivilegeComponent implements OnInit{
 
   }
 
+  getUpdates():string {
+    let updates: string = "";
+    for (const controlName in this.privilegeForm.controls) {
+      const control = this.privilegeForm.controls[controlName];
+      if (control.dirty) {
+        updates = updates + "<br>" + controlName.charAt(0).toUpperCase() + controlName.slice(1)+" Changed";
+      }
+    }
+    return updates;
+  }
+
+  getErrors(){
+
+    let errors:string = "";
+
+    for(const controlName in this.privilegeForm.controls){
+      const control = this.privilegeForm.controls[controlName];
+      if(control.errors){
+          errors = errors + "<br>Invalid " + controlName;
+      }
+    }
+    return errors;
+  }
+
+  add() {
+    let errors = this.getErrors();
+
+    if(errors != ""){
+      this.dialog.open(WarningDialogComponent,{
+        data:{heading:"Errors - Privilege Add ",message: "You Have Following Errors <br> " + errors}
+      }).afterClosed().subscribe(res => {
+        if(!res){
+          return;
+        }
+      });
+    }else{
+      //this.employee = this.employeeForm.getRawValue();
+      const obj:Privilege = {
+
+        module: {id: parseInt(this.privilegeForm.controls['module'].value)},
+        operation: {id: parseInt(this.privilegeForm.controls['operation'].value)},
+        role: {id: parseInt(this.privilegeForm.controls['role'].value)},
+
+      }
+
+      this.dialog.open(ConfirmDialogComponent,{data:"Add Privilege "})
+        .afterClosed().subscribe(res => {
+        if(res) {
+          this.ps.save(obj).subscribe({
+            next:() => {
+              this.tst.handleResult('success',"Privilege Saved Successfully");
+              this.loadTable("");
+              this.clearForm();
+            },
+            error:(err:any) => {
+              this.tst.handleResult('failed',err.error.data.message);
+              //console.log(err);
+            }
+          });
+        }
+      })
+    }
+  }
+
   handleSearch() {
 
   }
@@ -193,10 +263,6 @@ export class PrivilegeComponent implements OnInit{
   }
 
   clearForm() {
-
-  }
-
-  add() {
 
   }
 
